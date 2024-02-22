@@ -1,15 +1,17 @@
-import wallet from "../wba-wallet.json"
+import wallet from "./wallet/dev-wallet.json"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { 
     createMetadataAccountV3, 
+    // updateMetadataAccountV2,
     CreateMetadataAccountV3InstructionAccounts, 
     CreateMetadataAccountV3InstructionArgs,
-    DataV2Args
+    DataV2Args,
+    getAccountMetasAndSigners
 } from "@metaplex-foundation/mpl-token-metadata";
 import { createSignerFromKeypair, signerIdentity, publicKey } from "@metaplex-foundation/umi";
 
 // Define our Mint address
-const mint = publicKey("<mint address>")
+const mint = publicKey("75NJm84GS4PKQVwxotjZfEjnxmBP3FTZgaAxxSfcEGh1")
 
 // Create a UMI connection
 const umi = createUmi('https://api.devnet.solana.com');
@@ -19,20 +21,38 @@ umi.use(signerIdentity(createSignerFromKeypair(umi, keypair)));
 
 (async () => {
     try {
+
         // Start here
-        // let accounts: CreateMetadataAccountV3InstructionAccounts = {
-        //     ???
-        // }
+        let accounts: CreateMetadataAccountV3InstructionAccounts = {
+            mint: mint,
+            mintAuthority: signer,
+            payer: signer
+        }
 
-        // let data: DataV2Args = {
-        //     ???
-        // }
+        let data: DataV2Args = {
+            name: "Oooooops",
+            symbol: "OOPS",
+            uri: "https://en.wikipedia.org/wiki/Oops!_(film)#/media/File:Oops_poster.jpg",
+            creators: [
+                {
+                    address: keypair.publicKey,
+                    verified: true,
+                    share: 100
+                }
+            ],
+            sellerFeeBasisPoints: 0,
+            collection: null,
+            uses: null,
+        }
 
-        // let args: CreateMetadataAccountV3InstructionArgs = {
-        //     ???
-        // }
 
-        // let tx = createMetadataAccountV3(
+        let args: CreateMetadataAccountV3InstructionArgs = {
+            data,
+            isMutable: true,
+            collectionDetails: null
+        }
+
+        // let tx = updateMetadataAccountV2(
         //     umi,
         //     {
         //         ...accounts,
@@ -40,8 +60,17 @@ umi.use(signerIdentity(createSignerFromKeypair(umi, keypair)));
         //     }
         // )
 
-        // let result = await tx.sendAndConfirm(umi).then(r => r.signature.toString());
-        // console.log(result);
+        let tx = createMetadataAccountV3(
+            umi,
+            {
+                ...accounts,
+                ...args
+            }
+        )
+
+        let result = await tx.sendAndConfirm(umi).then(r => r.signature.toString());
+        console.log(result);
+        console.log(`Transaction: ${tx}`)
     } catch(e) {
         console.error(`Oops, something went wrong: ${e}`)
     }
