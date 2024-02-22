@@ -35,7 +35,7 @@ umi.use(signerIdentity(createSignerFromKeypair(umi, keypair)));
             creators: [
                 {
                     address: keypair.publicKey,
-                    verified: true,
+                    verified: true, // guarantees token was signed by that creator
                     share: 100
                 }
             ],

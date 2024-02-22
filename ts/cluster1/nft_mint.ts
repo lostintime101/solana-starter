@@ -4,7 +4,6 @@ import { createNft, mplTokenMetadata } from "@metaplex-foundation/mpl-token-meta
 
 import wallet from "./wallet/dev-wallet.json"
 import base58 from "bs58";
-
 const RPC_ENDPOINT = "https://api.devnet.solana.com";
 const umi = createUmi(RPC_ENDPOINT);
 
@@ -17,13 +16,19 @@ const mint = generateSigner(umi);
 
 (async () => {
     try {
-        // let tx = 
 
-        // let result = await tx.sendAndConfirm(umi);
-        // const signature = base58.encode(result.signature);
+        let tx = createNft(umi, {
+            mint,
+            name: "Ze besten NFT auf der Welt",
+            uri: "https://arweave.net/VN7Qp-T5kRRkN9z4tiWDwhdzUImP2LHeUsmzO5663h0",
+            sellerFeeBasisPoints: percentAmount(1.5),
+        });
+
+        let result = await tx.sendAndConfirm(umi);
+        const signature = base58.encode(result.signature);
         
-        // console.log(`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`)
-        // console.log("Mint Address: ", mint.publicKey);
+        console.log(`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`)
+        console.log("Mint Address: ", mint.publicKey);
 
     } catch (e) {
         console.error(`Oops, something went wrong: ${e}`);
