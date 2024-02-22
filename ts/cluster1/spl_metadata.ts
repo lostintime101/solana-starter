@@ -2,7 +2,6 @@ import wallet from "./wallet/dev-wallet.json"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { 
     createMetadataAccountV3, 
-    // updateMetadataAccountV2,
     CreateMetadataAccountV3InstructionAccounts, 
     CreateMetadataAccountV3InstructionArgs,
     DataV2Args,
@@ -18,7 +17,7 @@ const umi = createUmi('https://api.devnet.solana.com');
 const keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(wallet));
 const signer = createSignerFromKeypair(umi, keypair);
 umi.use(signerIdentity(createSignerFromKeypair(umi, keypair)));
-
+  
 (async () => {
     try {
 
@@ -42,7 +41,7 @@ umi.use(signerIdentity(createSignerFromKeypair(umi, keypair)));
             ],
             sellerFeeBasisPoints: 0,
             collection: null,
-            uses: null,
+            uses: null, // ?
         }
 
 

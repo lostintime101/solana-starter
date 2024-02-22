@@ -6,41 +6,41 @@ import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token";
 const keypair = Keypair.fromSecretKey(new Uint8Array(wallet));
 
 //Create a Solana devnet connection
-const commitment: Commitment = "confirmed";
+const commitment: Commitment = "confirmed"; // processed | confirmed | finalized
 const connection = new Connection("https://api.devnet.solana.com", commitment);
 
-// Mint address
+// Mint address, previous exercise
 const mint = new PublicKey("75NJm84GS4PKQVwxotjZfEjnxmBP3FTZgaAxxSfcEGh1");
 
-// Recipient address
+// Recipient address, can be random address
 const to = new PublicKey("CnfAC8WoLLhVcB35yW9UZzWFNDaFpNk3nfYRM4e64ipZ");
 
 (async () => {
     try {
         // Get the token account of the fromWallet address, and if it does not exist, create it
         const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
-            connection,
-            keypair,
-            mint,
-            keypair.publicKey
+            connection, // Connection
+            keypair, // payer: Signer
+            mint, // mint: PublicKey
+            keypair.publicKey // owner: PublicKey
         );
 
         // Get the token account of the toWallet address, and if it does not exist, create it
         const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-            connection,
-            keypair,
-            mint,
-            to
+            connection, // Connection
+            keypair, // payer: Signer
+            mint, // mint: PublicKey
+            to // owner: PublicKey
         );
         
         // Transfer the new token to the "toTokenAccount" we just created
         const tx = await transfer(
-            connection,
-            keypair,
-            fromTokenAccount.address,
-            toTokenAccount.address,
-            keypair,
-            1000n
+            connection, // Connection
+            keypair, // payer: Signer
+            fromTokenAccount.address, // source: PublicKey
+            toTokenAccount.address, // dest: PublicKey
+            keypair, // owner: Signer
+            1000n // amount: number
         );
         console.log(`Your transaction txid: ${tx}`);
 

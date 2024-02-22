@@ -13,11 +13,11 @@ const connection = new Connection("https://api.devnet.solana.com", commitment);
     try {
         // Start here
         const mint = await createMint(
-            connection, 
-            keypair, 
-            keypair.publicKey, 
-            null, 
-            6
+            connection, // connection
+            keypair, // payer
+            keypair.publicKey, // mintAuthority 
+            null,  // freezeAuthority
+            6 // Decimals
         );
         console.log(`Mint address: ${mint.toBase58()}`);
     } catch(error) {
